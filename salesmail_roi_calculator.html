@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SalesMail ROI Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      background: #fff;
+      max-width: 480px;
+      margin: auto;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .container h2 {
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #222;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+    input[type="number"], input[type="range"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    .output {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+      font-size: 1.1em;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #0077cc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📊 SalesMail ROI Calculator</h2>
+    <label for="rent">Monthly Rent ($)</label>
+    <input type="number" id="rent" value="3800" min="0" />
+
+    <label for="leases">New Leases Signed / Month</label>
+    <input type="number" id="leases" value="10" min="0" />
+
+    <label for="lift">Monthly Lift from SalesMail: <span id="liftVal">10%</span></label>
+    <input type="range" id="lift" min="5" max="20" value="10" step="1" />
+
+    <div class="output">
+      <p>📈 Extra Move-Ins: <span class="highlight" id="moveIns">1.0</span> / month</p>
+      <p>💵 Extra Revenue: <span class="highlight" id="revenue">$3,800</span> / month</p>
+      <p>🚀 ROI: <span class="highlight" id="roi">2275%</span></p>
+    </div>
+  </div>
+
+  <script>
+    const rentInput = document.getElementById('rent');
+    const leasesInput = document.getElementById('leases');
+    const liftInput = document.getElementById('lift');
+    const liftVal = document.getElementById('liftVal');
+    const moveIns = document.getElementById('moveIns');
+    const revenue = document.getElementById('revenue');
+    const roi = document.getElementById('roi');
+
+    const update = () => {
+      const rent = parseFloat(rentInput.value) || 0;
+      const leases = parseFloat(leasesInput.value) || 0;
+      const lift = parseFloat(liftInput.value) || 0;
+      const cost = 160;
+
+      const addedMoveIns = leases * (lift / 100);
+      const addedRevenue = addedMoveIns * rent;
+      const calcROI = ((addedRevenue - cost) / cost) * 100;
+
+      liftVal.textContent = `${lift}%`;
+      moveIns.textContent = addedMoveIns.toFixed(1);
+      revenue.textContent = `$${addedRevenue.toLocaleString()}`;
+      roi.textContent = `${Math.round(calcROI)}%`;
+    };
+
+    rentInput.addEventListener('input', update);
+    leasesInput.addEventListener('input', update);
+    liftInput.addEventListener('input', update);
+
+    update(); // initial calculation
+  </script>
+</body>
+</html>
